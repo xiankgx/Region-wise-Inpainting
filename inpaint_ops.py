@@ -21,7 +21,7 @@ def random_interpolates(x, y, alpha=None):
     y = tf.reshape(y, [shape[0], -1])
     if alpha is None:
         alpha = tf.random_uniform(shape=[shape[0], 1])
-    interpolates = x + alpha*(y - x)
+    interpolates = x + alpha * (y - x)
     return tf.reshape(interpolates, shape)
 
 
@@ -50,7 +50,7 @@ def standard_conv(x, mask, cnum, ksize=3, stride=1, rate=1, name='conv', padding
             name: name of layers
     '''
 
-    p = int(rate*(ksize-1)/2)
+    p = int(rate * (ksize - 1)/2)
     x = tf.pad(x, [[0, 0], [p, p], [p, p], [0, 0]], 'REFLECT')
     padding = 'VALID'
     x = tf.layers.conv2d(x, cnum, ksize, stride,
@@ -75,7 +75,7 @@ def standard_dconv(x, mask, cnum, name='deconv', padding='VALID'):
     stride = 1
     # shape = x.get_shape().as_list()
     shape = tf.shape(x)
-    x = tf.image.resize_nearest_neighbor(x, [shape[1]*2, shape[2]*2])
+    x = tf.image.resize_nearest_neighbor(x, [shape[1] * 2, shape[2] * 2])
     p3 = int(1 * (3 - 1) / 2)
     x = tf.pad(x, [[0, 0], [p3, p3], [p3, p3], [0, 0]], 'REFLECT')
     x = tf.layers.conv2d(x, cnum, ksize, stride,
@@ -141,7 +141,7 @@ def dis_conv(x, cnum, ksize=5, stride=2, activation='leak_relu', name='conv'):
     x = tf.nn.conv2d(x, w,
                      strides=[1, stride, stride, 1],
                      padding='SAME')
-    bias = tf.get_variable(name=name+'_bias', shape=[cnum])
+    bias = tf.get_variable(name=name + '_bias', shape=[cnum])
     if activation != None:
         return LeakyRelu(x + bias, name=name)
     else:

@@ -253,8 +253,9 @@ def build_graph_with_loss(batch_data, batch_size, mask, vgg_path, adv_type, stag
                 + tf.reduce_mean(tf.nn.relu(1 + d_pred2) * mask_label)
             adv_g_loss = -1 * tf.reduce_mean(tf.nn.relu(d_pred) * mask_label) \
                 - tf.reduce_mean(tf.nn.relu(d_pred2) * mask_label)
+
         else:
-            adv_d_loss = alpha*tf.reduce_sum(tf.abs(mask_label - d_real)) \
+            adv_d_loss = alpha * tf.reduce_sum(tf.abs(mask_label - d_real)) \
                 + tf.reduce_sum(tf.abs(0 - d_pred)) \
                 + tf.reduce_sum(tf.abs(0 - d_pred2))
             adv_g_loss = tf.reduce_sum(tf.abs(mask_label - d_pred)) \
@@ -264,7 +265,7 @@ def build_graph_with_loss(batch_data, batch_size, mask, vgg_path, adv_type, stag
         adv_g_loss = None
 
     if stage == 1:
-        g_loss = rec_loss+cor_style + lambda_adv * adv_g_loss
+        g_loss = rec_loss + cor_style + lambda_adv * adv_g_loss
     else:
         g_loss = rec_loss + cor_style
 
