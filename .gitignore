@@ -1,0 +1,3 @@
+.vscode/
+__pycache__/
+vgg/vgg16.npy
