@@ -33,42 +33,39 @@ def SINet(x, mask, padding='SAME', name='inpaint_net', reuse=False):
             image predicted by semantic inferring network
     '''
 
-    xin = x
-    mask_in = mask
     cnum = 32
-    ones_x = tf.ones_like(x)[:, :, :, 0:1]  # 一层
 
-    x = tf.concat([x, mask], axis=3)  # 拼接
+    x = tf.concat([x, mask], axis=3)
     with tf.variable_scope(name, reuse=reuse):
         x1 = standard_conv(x, mask, cnum, 5, 1,
                            name='conv1')
 
-        x2 = standard_conv(x1, mask, 2*cnum, 3, 2,
+        x2 = standard_conv(x1, mask, 2 * cnum, 3, 2,
                            name='conv2_downsample')
-        x3 = standard_conv(x2, mask, 2*cnum, 3, 1,
+        x3 = standard_conv(x2, mask, 2 * cnum, 3, 1,
                            name='conv3')
 
-        x4 = standard_conv(x3, mask, 4*cnum, 3, 2,
+        x4 = standard_conv(x3, mask, 4 * cnum, 3, 2,
                            name='conv4_downsample')
-        x5 = standard_conv(x4, mask, 4*cnum, 3, 1,
+        x5 = standard_conv(x4, mask, 4 * cnum, 3, 1,
                            name='conv5')
 
-        x6 = standard_conv(x5, mask, 4*cnum, 3, 1,
+        x6 = standard_conv(x5, mask, 4 * cnum, 3, 1,
                            name='conv6')
 
         # dilated conv
-        x7 = standard_conv(x6, mask, 4*cnum, 3, rate=2,
+        x7 = standard_conv(x6, mask, 4 * cnum, 3, rate=2,
                            name='conv7_atrous')
-        x8 = standard_conv(x7, mask, 4*cnum, 3, rate=4,
+        x8 = standard_conv(x7, mask, 4 * cnum, 3, rate=4,
                            name='conv8_atrous')
-        x9 = standard_conv(x8, mask, 4*cnum, 3, rate=8,
+        x9 = standard_conv(x8, mask, 4 * cnum, 3, rate=8,
                            name='conv9_atrous')
-        x10 = standard_conv(x9, mask, 4*cnum, 3, rate=16,
+        x10 = standard_conv(x9, mask, 4 * cnum, 3, rate=16,
                             name='conv10_atrous')
 
-        x11 = standard_conv(tf.concat([x10, x6], axis=-1), mask, 4*cnum, 3, 1,
+        x11 = standard_conv(tf.concat([x10, x6], axis=-1), mask, 4 * cnum, 3, 1,
                             name='conv11')
-        x12 = standard_conv(tf.concat([x11, x5], axis=-1), mask, 4*cnum, 3, 1,
+        x12 = standard_conv(tf.concat([x11, x5], axis=-1), mask, 4 * cnum, 3, 1,
                             name='conv12')
 
         x_complete, x_missing = tf.concat([x12, x4], axis=-1), x12
@@ -83,7 +80,8 @@ def SINet(x, mask, padding='SAME', name='inpaint_net', reuse=False):
                             name='com_15')
         x16 = standard_conv(x15, mask, cnum, 3, 1,
                             name='conv16')
-        x17 = standard_conv(x16, mask, cnum//2, 3, 1,
+
+        x17 = standard_conv(x16, mask, cnum // 2, 3, 1,
                             name='conv17')
         x18 = standard_conv(x17, mask, 3, 3, 1,
                             name='conv18')
@@ -103,8 +101,6 @@ def GPNet(x, mask, padding='SAME', name='inpaint_net_1', reuse=False):
             image predicted by global perceiving network
     '''
 
-    xin = x
-    mask_in = mask
     cnum = 32
 
     x = tf.concat([x, mask], axis=3)  # concat
@@ -112,42 +108,42 @@ def GPNet(x, mask, padding='SAME', name='inpaint_net_1', reuse=False):
         x1 = standard_conv(x, mask, cnum, 5, 1,
                            name='conv1')
 
-        x2 = standard_conv(x1, mask, 2*cnum, 3, 2,
+        x2 = standard_conv(x1, mask, 2 * cnum, 3, 2,
                            name='conv2_downsample')
-        x3 = standard_conv(x2, mask, 2*cnum, 3, 1,
+        x3 = standard_conv(x2, mask, 2 * cnum, 3, 1,
                            name='conv3')
 
-        x4 = standard_conv(x3, mask, 4*cnum, 3, 2,
+        x4 = standard_conv(x3, mask, 4 * cnum, 3, 2,
                            name='conv4_downsample')
-        x5 = standard_conv(x4, mask, 4*cnum, 3, 1,
+        x5 = standard_conv(x4, mask, 4 * cnum, 3, 1,
                            name='conv5')
 
-        x6 = standard_conv(x5, mask, 4*cnum, 3, 1,
+        x6 = standard_conv(x5, mask, 4 * cnum, 3, 1,
                            name='conv6')
 
         # dilated conv
-        x7 = standard_conv(x6, mask, 4*cnum, 3, rate=2,
+        x7 = standard_conv(x6, mask, 4 * cnum, 3, rate=2,
                            name='conv7_atrous')
-        x8 = standard_conv(x7, mask, 4*cnum, 3, rate=4,
+        x8 = standard_conv(x7, mask, 4 * cnum, 3, rate=4,
                            name='conv8_atrous')
-        x9 = standard_conv(x8, mask, 4*cnum, 3, rate=8,
+        x9 = standard_conv(x8, mask, 4 * cnum, 3, rate=8,
                            name='conv9_atrous')
-        x10 = standard_conv(x9, mask, 4*cnum, 3, rate=16,
+        x10 = standard_conv(x9, mask, 4 * cnum, 3, rate=16,
                             name='conv10_atrous')
 
-        x11 = standard_conv(tf.concat([x10, x6], axis=-1), mask, 4*cnum, 3, 1,
+        x11 = standard_conv(tf.concat([x10, x6], axis=-1), mask, 4 * cnum, 3, 1,
                             name='conv11')
-        x12 = standard_conv(tf.concat([x11, x5], axis=-1), mask, 4*cnum, 3, 1,
+        x12 = standard_conv(tf.concat([x11, x5], axis=-1), mask, 4 * cnum, 3, 1,
                             name='conv12')
 
-        x13 = standard_dconv(tf.concat([x12, x4], axis=-1), mask, 2*cnum,
+        x13 = standard_dconv(tf.concat([x12, x4], axis=-1), mask, 2 * cnum,
                              name='conv13_upsample')
-        x14 = standard_conv(tf.concat([x13, x3], axis=-1), mask, 2*cnum, 3, 1,
+        x14 = standard_conv(tf.concat([x13, x3], axis=-1), mask, 2 * cnum, 3, 1,
                             name='conv14')
 
         x15 = standard_dconv(tf.concat([x14, x2], axis=-1), mask, cnum,
                              name='conv15_upsample')
-        x16 = standard_conv(tf.concat([x15, x1], axis=-1), mask, cnum//2, 3, 1,
+        x16 = standard_conv(tf.concat([x15, x1], axis=-1), mask, cnum // 2, 3, 1,
                             name='conv16')
 
         x17 = standard_conv(x16, mask, 3, 3, 1,
@@ -158,7 +154,7 @@ def GPNet(x, mask, padding='SAME', name='inpaint_net_1', reuse=False):
         return x18
 
 
-def RW_discriminator(x, mask, batch_size, activation='leaky_relu', reuse=False):
+def RW_discriminator(x, mask, activation='leaky_relu', reuse=False):
     '''
     Region-wise discriminator
     Args:
@@ -172,21 +168,19 @@ def RW_discriminator(x, mask, batch_size, activation='leaky_relu', reuse=False):
         cnum = 64
         x = tf.concat([x, mask], axis=3)
         x = dis_conv(x, cnum, name='d_conv1')
-        x = dis_conv(x, 2*cnum, name='d_conv2')
-        x = dis_conv(x, 4*cnum, name='d_conv3')
-        x = dis_conv(x, 4*cnum, name='d_conv4')
-        x = dis_conv(x, 4*cnum, name='d_conv5')
-        x = dis_conv(x, 4*cnum, name='d_conv6', activation=activation)
+        x = dis_conv(x, 2 * cnum, name='d_conv2')
+        x = dis_conv(x, 4 * cnum, name='d_conv3')
+        x = dis_conv(x, 4 * cnum, name='d_conv4')
+        x = dis_conv(x, 4 * cnum, name='d_conv5')
+        x = dis_conv(x, 4 * cnum, name='d_conv6', activation=activation)
         return x
 
 
-def build_graph_with_loss(batch_data, batch_size, mask, vgg_path, adv_type, stage=0,
+def build_graph_with_loss(batch_data, mask, vgg_path, adv_type, stage=0,
                           lambda_style=0.001, lambda_cor=0.00001, alpha=0.01, lambda_adv=1.0,
                           reuse=False, training=True):
     image_gt = tf.subtract(tf.divide(batch_data, 127.5), 1.)
-    # date_shape = batch_data.get_shape().as_list()
-    date_shape = tf.shape(batch_data)
-    batch_incomplete = image_gt*mask
+    batch_incomplete = image_gt * mask
 
     image_p1, image_p2 = RW_generator(batch_incomplete, mask)
     image_c1 = image_p1 * (1 - mask) + image_gt * mask
@@ -213,11 +207,13 @@ def build_graph_with_loss(batch_data, batch_size, mask, vgg_path, adv_type, stag
         if adv_type == ' ':
             activation = 'leaky_relu'
 
-        d_pred = RW_discriminator(
-            image_c1 * (1 - mask), mask, batch_size, activation)
-        d_pred2 = RW_discriminator(image_c2 * (1 - mask), mask, batch_size, activation,
+        d_pred = RW_discriminator(image_c1 * (1 - mask), mask,
+                                  activation)
+        d_pred2 = RW_discriminator(image_c2 * (1 - mask), mask,
+                                   activation,
                                    reuse=True)
-        d_real = RW_discriminator(image_gt * (1 - mask), mask, batch_size, activation,
+        d_real = RW_discriminator(image_gt * (1 - mask), mask,
+                                  activation,
                                   reuse=True)
         mask_label = 1 - mask
         # shape = d_pred.get_shape().as_list()
@@ -227,15 +223,20 @@ def build_graph_with_loss(batch_data, batch_size, mask, vgg_path, adv_type, stag
 
         if adv_type == 'wgan_gp':
             penalty_img = random_interpolates(image_gt, image_c2)
-            dout_penalty = RW_discriminator(penalty_img, mask, batch_size, activation,
+            dout_penalty = RW_discriminator(penalty_img, mask,
+                                            activation,
                                             reuse=True)
             penalty_loss = gradients_penalty(penalty_img, dout_penalty,
                                              mask=mask)
-            d_loss = tf.reduce_mean(d_pred * mask_label) \
+
+            # Fake minus real
+            adv_d_loss = tf.reduce_mean(d_pred * mask_label) \
                 + tf.reduce_mean(d_pred2 * mask_label) \
                 - 0.01 * tf.reduce_mean(d_real * mask_label) \
                 + penalty_loss
-            d_g_loss = -1 * tf.reduce_mean(d_pred * mask_label) \
+
+            # Negative fake
+            adv_g_loss = -1 * tf.reduce_mean(d_pred * mask_label) \
                 - tf.reduce_mean(d_pred2 * mask_label)
 
         elif adv_type == 'gan':
@@ -243,6 +244,7 @@ def build_graph_with_loss(batch_data, batch_size, mask, vgg_path, adv_type, stag
                 + tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=d_pred, labels=tf.zeros_like(d_pred)) * mask_label) \
                 + tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
                     logits=d_pred2, labels=tf.zeros_like(d_pred2)) * mask_label)
+
             adv_g_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=d_pred, labels=tf.ones_like(d_real)) * mask_label) \
                 + tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
                     logits=d_pred2, labels=tf.ones_like(d_real)) * mask_label)
@@ -251,6 +253,7 @@ def build_graph_with_loss(batch_data, batch_size, mask, vgg_path, adv_type, stag
             adv_d_loss = 0.01 * tf.reduce_mean(tf.nn.relu(1 - d_real) * mask_label) \
                 + tf.reduce_mean(tf.nn.relu(1 + d_pred) * mask_label) \
                 + tf.reduce_mean(tf.nn.relu(1 + d_pred2) * mask_label)
+
             adv_g_loss = -1 * tf.reduce_mean(tf.nn.relu(d_pred) * mask_label) \
                 - tf.reduce_mean(tf.nn.relu(d_pred2) * mask_label)
 
@@ -258,6 +261,7 @@ def build_graph_with_loss(batch_data, batch_size, mask, vgg_path, adv_type, stag
             adv_d_loss = alpha * tf.reduce_sum(tf.abs(mask_label - d_real)) \
                 + tf.reduce_sum(tf.abs(0 - d_pred)) \
                 + tf.reduce_sum(tf.abs(0 - d_pred2))
+
             adv_g_loss = tf.reduce_sum(tf.abs(mask_label - d_pred)) \
                 + tf.reduce_sum(tf.abs(mask_label - d_pred2))
     else:

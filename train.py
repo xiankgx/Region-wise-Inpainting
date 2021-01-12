@@ -76,7 +76,6 @@ if __name__ == '__main__':
     if args.stage == 0:
         g_vars, _, adv_g_loss, _, rec_loss, correlation_loss, style_loss \
             = build_graph_with_loss(image,
-                                    args.batch_size,
                                     mask,
                                     args.vgg_path,
                                     args.adv_type,
@@ -88,7 +87,6 @@ if __name__ == '__main__':
     else:
         g_vars, d_vars, adv_g_loss, adv_d_loss, rec_loss, correlation_loss, style_loss \
             = build_graph_with_loss(image,
-                                    args.batch_size,
                                     mask,
                                     args.vgg_path,
                                     args.adv_type,
@@ -158,7 +156,7 @@ if __name__ == '__main__':
                                       for _ in range(len(image_))],
                                      axis=0)
                 else:
-                    mask_ = np.stack([continuous_mask(args.height, args.width, num, 360, 32 * 3, 50 * 3)
+                    mask_ = np.stack([continuous_mask(args.height, args.width, num, 360, 32 * 2, 50 * 2)
                                       for _ in range(len(image_))],
                                      axis=0)
 
